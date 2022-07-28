@@ -9,16 +9,17 @@ import (
 	"github.com/End313234/go-simple/internal/utils/converters"
 )
 
+// Contains the database schemas and the path to the directory that
+// stores the data
 type Database struct {
-	Path    string
-	Schemas []any
+	Path    string // Path to the database
+	Schemas []any  // Array containing the schemas (not implemented yet)
 }
 
-/* Handles the connection to the database. If `createIfDoesNotExist`
-*  is set to `true`, the file will be create if the provided file
-*  does not exist. However, if set to `false`, the function will panic
-*  if the file does not exist.
- */
+// Handles the connection to the database. If `createIfDoesNotExist`
+// is set to `true`, the file will be create if the provided file
+// does not exist. However, if set to `false`, the function will panic
+// if the file does not exist.
 func (database *Database) Connect(config *Config, schemas ...Schema) error {
 	dir, err := os.Stat(database.Path)
 	if err != nil {
