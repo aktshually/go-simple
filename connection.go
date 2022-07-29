@@ -1,4 +1,4 @@
-package go_simple
+package gosimple
 
 import (
 	"errors"

@@ -1,3 +1,3 @@
-package go_simple
+package gosimple
 
 type Schema interface{}

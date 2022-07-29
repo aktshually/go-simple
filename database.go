@@ -1,4 +1,4 @@
-package go_simple
+package gosimple
 
 // Contains the database schemas and the path to the directory that
 // stores the data

@@ -1,4 +1,4 @@
-package go_simple
+package gosimple
 
 type Config struct {
 	CreateIfDoesNotExist bool   // If truthy, creates the file in the provided pattern if the file does not exist
