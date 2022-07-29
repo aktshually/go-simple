@@ -42,7 +42,7 @@ func (connection *Connection) Connect(schemas ...Schema) error {
 	}
 
 	for _, schema := range schemas {
-		schemaName := reflect.TypeOf(schema).Name()
+		schemaName := reflect.TypeOf(&schema).Name()
 
 		switch connection.Config.Pattern {
 		case "PascalCase":
