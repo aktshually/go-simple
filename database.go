@@ -1,4 +1,4 @@
-package database
+package main
 
 import (
 	"errors"
@@ -12,15 +12,15 @@ import (
 // Contains the database schemas and the path to the directory that
 // stores the data
 type Database struct {
-	Path    string // Path to the database
-	Schemas []any  // Array containing the schemas (not implemented yet)
+	Path    string             // Path to the database
+	Schemas map[*Schema]string // Array containing the schemas (not implemented yet)
 }
 
 // Handles the connection to the database. If CreateIfDoesNotExist
 // is truthy, the file will be create if the provided file
 // does not exist. However, if it is falsy, the function will panic
 // if the file does not exist.
-func (database *Database) Connect(config *Config, schemas ...Schema) error {
+func (database *Database) Connect(config *Config, schemas ...*Schema) error {
 	dir, err := os.Stat(database.Path)
 	if err != nil {
 		return errors.New("no permission to access the provided path")
@@ -54,7 +54,9 @@ func (database *Database) Connect(config *Config, schemas ...Schema) error {
 			return errors.New("Pattern must be one of: PascalCase, camelCase, kebab-case, snake_case")
 		}
 
-		file, err := os.OpenFile(fmt.Sprintf("%s/%s.json", database.Path, schemaName), flags, 0644)
+		filePath := fmt.Sprintf("%s/%s.json", database.Path, schemaName)
+
+		file, err := os.OpenFile(filePath, flags, 0644)
 		if err != nil {
 			return errors.New("the file could not be created")
 		}
@@ -63,6 +65,8 @@ func (database *Database) Connect(config *Config, schemas ...Schema) error {
 		if err != nil {
 			return errors.New("could not write to the file")
 		}
+
+		database.Schemas[schema] = filePath
 	}
 
 	return nil

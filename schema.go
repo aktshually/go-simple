@@ -1,3 +1,3 @@
-package database
+package main
 
 type Schema interface{}
