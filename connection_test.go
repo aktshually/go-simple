@@ -16,14 +16,13 @@ func TestMain(m *testing.M) {
 func TestNew(t *testing.T) {
 	assert := assert.New(t)
 
-	connection := Connection{}
 	connectionPath := "./internal/databases"
 	connectionConfig := Config{
 		CreateIfDoesNotExist: true,
 		Pattern:              constants.KEBAB_CASE,
 	}
 
-	connection.New(connectionPath, connectionConfig)
+	connection := NewConnection(connectionPath, connectionConfig)
 
 	assert.Equal(connectionPath, connection.Path)
 	assert.Equal(connectionConfig, connection.Config)
@@ -40,8 +39,7 @@ func TestConnect(t *testing.T) {
 	}
 
 	futureUserSchemaFilePath := "./internal/databases/user-schema.json"
-	connection := Connection{}
-	connection.New("./internal/databases", Config{
+	connection := NewConnection("./internal/databases", Config{
 		CreateIfDoesNotExist: true,
 		Pattern:              constants.KEBAB_CASE,
 	})
@@ -65,8 +63,7 @@ func TestGetDatabase(t *testing.T) {
 		Name string
 	}
 
-	connection := Connection{}
-	connection.New(databasePath, Config{
+	connection := NewConnection(databasePath, Config{
 		CreateIfDoesNotExist: true,
 		Pattern:              constants.KEBAB_CASE,
 	})

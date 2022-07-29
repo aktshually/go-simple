@@ -9,21 +9,24 @@ import (
 	"github.com/End313234/go-simple/internal/utils/converters"
 )
 
+// Creates an instance of Connection
+func NewConnection(path string, config Config) *Connection {
+	connection := Connection{
+		Path:   path,
+		Config: config,
+		database: Database{
+			Path:    path,
+			Schemas: map[Schema]string{},
+		},
+	}
+
+	return &connection
+}
+
 type Connection struct {
 	Path     string // The path to the files
 	Config   Config // Database config
 	database Database
-}
-
-// Creates an instance of Connection
-func (connection *Connection) New(path string, config Config) *Connection {
-	connection.Path = path
-	connection.database.Path = path
-	connection.database.Schemas = map[Schema]string{}
-
-	connection.Config = config
-
-	return connection
 }
 
 // Handles the connection to the database
