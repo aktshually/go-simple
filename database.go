@@ -16,9 +16,9 @@ type Database struct {
 	Schemas []any  // Array containing the schemas (not implemented yet)
 }
 
-// Handles the connection to the database. If `createIfDoesNotExist`
-// is set to `true`, the file will be create if the provided file
-// does not exist. However, if set to `false`, the function will panic
+// Handles the connection to the database. If CreateIfDoesNotExist
+// is truthy, the file will be create if the provided file
+// does not exist. However, if it is falsy, the function will panic
 // if the file does not exist.
 func (database *Database) Connect(config *Config, schemas ...Schema) error {
 	dir, err := os.Stat(database.Path)
