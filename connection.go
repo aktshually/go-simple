@@ -26,7 +26,7 @@ func (connection *Connection) New(path string, config Config) *Connection {
 }
 
 // Handles the connection to the database
-func (connection *Connection) Connect(schemas ...*Schema) error {
+func (connection *Connection) Connect(schemas ...Schema) error {
 	dir, err := os.Stat(connection.Path)
 	if err != nil {
 		return errors.New("no permission to access the provided path")
@@ -72,7 +72,7 @@ func (connection *Connection) Connect(schemas ...*Schema) error {
 			return errors.New("could not write to the file")
 		}
 
-		connection.database.Schemas[schema] = filePath
+		connection.database.Schemas[&schema] = filePath
 	}
 
 	return nil
