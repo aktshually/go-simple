@@ -19,6 +19,7 @@ type Connection struct {
 func (connection *Connection) New(path string, config Config) *Connection {
 	connection.Path = path
 	connection.database.Path = path
+	connection.database.Schemas = map[Schema]string{}
 
 	connection.Config = config
 
@@ -42,8 +43,7 @@ func (connection *Connection) Connect(schemas ...Schema) error {
 	}
 
 	for _, schema := range schemas {
-		schemaName := reflect.TypeOf(&schema).Name()
-
+		schemaName := reflect.TypeOf(schema).Name()
 		switch connection.Config.Pattern {
 		case "PascalCase":
 			break
@@ -72,7 +72,7 @@ func (connection *Connection) Connect(schemas ...Schema) error {
 			return errors.New("could not write to the file")
 		}
 
-		connection.database.Schemas[&schema] = filePath
+		connection.database.Schemas[schema] = filePath
 	}
 
 	return nil

@@ -1,6 +1,8 @@
 package converters
 
-import "strings"
+import (
+	"strings"
+)
 
 func ConvertPascalCaseToCamelCase(s string) string {
 	patternWithLowerSizedFirstCharacter := strings.ToLower(string(s[0]))
