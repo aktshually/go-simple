@@ -40,9 +40,24 @@ func (connection *Connection) Connect(schemas ...Schema) error {
 		return errors.New("the provided path must be a valid directory")
 	}
 
-	flags := os.O_RDWR
-	if connection.Config.CreateIfDoesNotExist {
-		flags = os.O_CREATE | os.O_RDWR
+	var schemaName string
+	for _, schema := range schemas {
+		schemaName = reflect.TypeOf(schema).Name()
+		switch connection.Config.Pattern {
+		case "PascalCase":
+			break
+		case "camelCase":
+			schemaName = converters.ConvertPascalCaseToCamelCase(schemaName)
+			break
+		case "kebab-case":
+			schemaName = converters.ConvertPascalCaseToKebabCase(schemaName)
+			break
+		case "snake_case":
+			schemaName = converters.ConvertPascalCaseToSnakeCase(schemaName)
+			break
+		default:
+			return errors.New("Pattern must be one of: PascalCase, camelCase, kebab-case, snake_case")
+		}
 	}
 
 	for _, schema := range schemas {
@@ -63,16 +78,28 @@ func (connection *Connection) Connect(schemas ...Schema) error {
 			return errors.New("Pattern must be one of: PascalCase, camelCase, kebab-case, snake_case")
 		}
 
+		isFileExistent := false
 		filePath := fmt.Sprintf("%s/%s.json", connection.Path, schemaName)
+		_, err = os.Stat(filePath)
+		if err == nil {
+			isFileExistent = true
+		}
+
+		flags := os.O_RDWR
+		if !isFileExistent {
+			flags = os.O_CREATE | os.O_RDWR
+		}
 
 		file, err := os.OpenFile(filePath, flags, 0644)
 		if err != nil {
 			return errors.New("the file could not be created")
 		}
 
-		_, err = fmt.Fprint(file, "[]")
-		if err != nil {
-			return errors.New("could not write to the file")
+		if !isFileExistent {
+			_, err = fmt.Fprint(file, "[]")
+			if err != nil {
+				return errors.New("could not write to the file")
+			}
 		}
 
 		connection.database.Schemas[schema] = filePath

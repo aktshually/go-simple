@@ -10,7 +10,9 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	os.RemoveAll("./internal/databases")
+	code := m.Run()
+
+	os.Exit(code)
 }
 
 func TestNew(t *testing.T) {
@@ -18,8 +20,7 @@ func TestNew(t *testing.T) {
 
 	connectionPath := "./internal/databases"
 	connectionConfig := Config{
-		CreateIfDoesNotExist: true,
-		Pattern:              constants.KEBAB_CASE,
+		Pattern: constants.KEBAB_CASE,
 	}
 
 	connection := NewConnection(connectionPath, connectionConfig)
@@ -40,8 +41,7 @@ func TestConnect(t *testing.T) {
 
 	futureUserSchemaFilePath := "./internal/databases/user-schema.json"
 	connection := NewConnection("./internal/databases", Config{
-		CreateIfDoesNotExist: true,
-		Pattern:              constants.KEBAB_CASE,
+		Pattern: constants.KEBAB_CASE,
 	})
 	err := connection.Connect(UserSchema{})
 
@@ -64,8 +64,7 @@ func TestGetDatabase(t *testing.T) {
 	}
 
 	connection := NewConnection(databasePath, Config{
-		CreateIfDoesNotExist: true,
-		Pattern:              constants.KEBAB_CASE,
+		Pattern: constants.KEBAB_CASE,
 	})
 	connection.Connect(UserSchema{})
 	db = connection.GetDatabase()
