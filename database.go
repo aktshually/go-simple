@@ -16,6 +16,7 @@ type Database struct {
 	Schemas map[Schema]string // Array containing the schemas
 }
 
+// Creates an instance of the schema in the database and returns it
 func (database *Database) Create(schema Schema) (SchemaFile, error) {
 	emptySchema := reflect.Zero(reflect.TypeOf(schema)).Interface()
 	parsedFileContent := SchemaFile{}
